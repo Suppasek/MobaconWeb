@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import ReactTable from "react-table";
-import { getRequest, acceptanceById, declineById } from "../stores/actions/request";
+import { getRequest, acceptanceById, declineById, editById } from "../stores/actions/request";
 import { connect } from "react-redux";
 import { Link, withRouter } from "react-router-dom";
 import { Card, CardBody, Col, Row, Button, ButtonDropdown, DropdownToggle, DropdownMenu, DropdownItem, Container} from "reactstrap";
@@ -104,13 +104,11 @@ class Requests extends Component {
           <Button color="primary" className="btn-radius">Reviewing</Button>
         </Link>
       )
-    } else if (status === 'Completed') {
-      return (
-        <Button color="success" className="btn-radius">{status}</Button>
-      )
     } else if (status === 'Reviewed') {
       return (
-        <Button disabled color="secondary" className="btn-radius">{status}</Button>
+        <Link to={`request/${requestId}`} className="linkButton">
+          <Button color="success" className="btn-radius">Completed</Button>
+        </Link>
       )
     } else if (status === 'Pending') {
       return (
@@ -146,7 +144,8 @@ class Requests extends Component {
     this.setState({ data: newState });
   }
 
-  editReview = (id) => {
+  editReview = async (id) => {
+    await editById(id);
     this.props.history.push(`/request/${id}`);
   }
 
@@ -211,7 +210,7 @@ class Requests extends Component {
           </DropdownToggle>
           <DropdownMenu>
           { (status === 'Rejected' || status === 'Pending') && <DropdownItem onClick={() => this.acceptRequest(id, user)}>Start Review</DropdownItem> }
-          {(status === 'Completed' || status === 'Accepted') && <DropdownItem onClick={() => this.editReview(id)}>Edit Review</DropdownItem> }
+          {(status === 'Completed' || status === 'Accepted' || status === 'Reviewed') && <DropdownItem onClick={() => this.editReview(id)}>Edit Review</DropdownItem> }
           {(status !== 'Rejected' && status !== 'Completed') && <DropdownItem onClick={() => this.declineRequest(id, user)}>Decline</DropdownItem> }
           </DropdownMenu>
         </ButtonDropdown>

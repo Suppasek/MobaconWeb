@@ -23,7 +23,8 @@ import Modal from "react-modal";
 import {
   getRequestById,
   createOffer,
-  updateMemo
+  updateMemo,
+  getBillById
 } from "../../stores/actions/request";
 import {
   AppAside,
@@ -57,14 +58,15 @@ class Tabs extends Component {
   };
   componentDidMount = async () => {
     const { id } = this.props.match.params;
-    var result = await getRequestById(id);
-    if (!result.data) {
-      alert(result.message || "Server error");
+    try {
+      var result = await getRequestById(id);
+    } catch (e) {
+      alert(e.response.data.message || "Server error");
       this.props.history.push("/requests");
     }
-    console.log("get by id", result);
-    await this.setState({ data: result.data });
-    await this.setState({ loading: false });
+  
+    const bills = await getBillById(id);
+    await this.setState({ data: result.data, loading: false, bills });
   };
 
   formatDate = date => {
@@ -160,7 +162,8 @@ class Tabs extends Component {
       loading,
       data,
       data: { memo },
-      submitting
+      submitting,
+      bills,
     } = this.state;
     const canEdit = data.status === "Accepted" || data.status === "Pending";
     return loading ? (
@@ -175,7 +178,7 @@ class Tabs extends Component {
                   <span className="alignRequestIndex">
                     {`${data.user.fullName} Request`}
                   </span>
-                  <span className="statusLabel">{data.status}</span>
+                  <span className="statusLabel">{data.status === 'Reviewed' ? 'Completed' : data.status}</span>
                 </React.Fragment>
               </Col>
               <Col xs="4" md="4" className="alignHeader right">
@@ -350,33 +353,16 @@ class Tabs extends Component {
                           </tr>
                         </thead>
                         <tbody className="tbody">
-                          <tr>
-                            <td>August</td>
-                            <td>$230</td>
-                            <td>2341/3000</td>
-                            <td>1432/2000</td>
-                            <td>2GB / 4GB</td>
-                            <td>01.08.2018</td>
-                            <td>07.08.2018</td>
-                          </tr>
-                          <tr>
-                            <td>July</td>
-                            <td>$230</td>
-                            <td>2341/3000</td>
-                            <td>1432/2000</td>
-                            <td>2GB / 4GB</td>
-                            <td>01.08.2018</td>
-                            <td>07.08.2018</td>
-                          </tr>
-                          <tr>
-                            <td>June</td>
-                            <td>$230</td>
-                            <td>2341/3000</td>
-                            <td>1432/2000</td>
-                            <td>2GB / 4GB</td>
-                            <td>01.08.2018</td>
-                            <td>07.08.2018</td>
-                          </tr>
+                          {bills && bills.map(bill => (
+                          <tr id={bill._id}>
+                            <td>{moment(bill.emissionAt).format("MMMM")}</td>
+                            <td>${bill.amount}</td>
+                            <td>{bill.used.minutes}</td>
+                            <td>{bill.used.sms}</td>
+                            <td>{bill.used.internet}</td>
+                            <td>{moment(bill.emissionAt).format("DD.MM.YYYY")}</td>
+                            <td>{moment(bill.paidAt).format("DD.MM.YYYY")}</td>
+                          </tr>))}
                         </tbody>
                       </Table>
                       <div className="fullHistory">SEE FULL HISTORY</div>

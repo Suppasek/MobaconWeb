@@ -257,7 +257,10 @@ class Register extends React.Component {
     formData.append("fullName", this.state.name);
     formData.append("email", this.state.email);
     formData.append("phoneNumber", this.state.phoneNumber);
-    formData.append("image", this.state.imageFile, this.state.imageFile.name);
+    if (this.state.imageFile) {
+      formData.append("image", this.state.imageFile, this.state.imageFile.name);
+    }
+    
     this.props.register(formData, () => {
       const { onCompleted } = this.props;
       if (onCompleted) {

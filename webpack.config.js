@@ -123,7 +123,6 @@ module.exports = (env, argv) => {
     },
     devServer: {
       port,
-      hot: true,
       inline: true,
       contentBase: "/",
       historyApiFallback: {
@@ -136,6 +135,9 @@ module.exports = (env, argv) => {
         template: "public/index.html"
       }),
       ...(dev ? [new webpack.HotModuleReplacementPlugin()] : [])
-    ]
+    ],
+    watchOptions: {
+      poll: true
+    }
   };
 };

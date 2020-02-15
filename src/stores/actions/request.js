@@ -33,6 +33,10 @@ const getRequestById = async id => {
   return await apiRequest(`/request/${id}`, "GET");
 };
 
+const getBillById = async id => {
+  return apiRequest(`request/bills/${id}`, "GET")
+}
+
 const acceptanceById = async id => {
   console.log(`Acceptance ${id}`);
   return await apiRequest(`/request/${id}/acceptance`, "PATCH").catch(err =>
@@ -42,6 +46,12 @@ const acceptanceById = async id => {
 
 const declineById = async id => {
   return await apiRequest(`/request/${id}/decline`, "PATCH").catch(err =>
+    alert(err.response.data.message)
+  );
+};
+
+const editById = async id => {
+  return await apiRequest(`/request/${id}/edit`, "PATCH").catch(err =>
     alert(err.response.data.message)
   );
 };
@@ -70,5 +80,7 @@ export {
   createOffer,
   declineById,
   getAccepted,
-  updateMemo
+  updateMemo,
+  getBillById,
+  editById,
 };
