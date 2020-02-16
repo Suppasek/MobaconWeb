@@ -351,7 +351,7 @@ class Chat extends Component {
 
   groupByDate = (chatMessages) => {
     const groups =chatMessages.length && chatMessages.reduce((groups, message) => {
-      const currentDate = new Date();
+      const currentDate = moment().format('YYYY/MMMM/DD');
       const date = (message && message.createdAt && message.createdAt.split) ? message.createdAt.split('T')[0] : currentDate
       if (!groups[date]) {
         groups[date] = [];
