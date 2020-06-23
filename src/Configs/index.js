@@ -1,61 +1,61 @@
-import _path from "path";
+import _path from "path"
 
 export const api = {
-  baseUrl: "https://mobacon-api.pieros.site",
-  baseWss: "wss://mobacon-api.pieros.site",
+  baseUrl: "https://mobacon-api.topwork.asia",
+  baseWss: "wss://mobacon-api.topwork.asia",
   apiPath: "/mobacon/api/web"
-};
+}
 
 function ReqError(response) {
   this.response = {
     data: response
-  };
-  return this;
+  }
+  return this
 }
 
 async function handleError(response) {
   if (!response.ok) {
     if (response.status == 401) {
-      console.log("error response", response);
-      window.location.replace("/login");
+      console.log("error response", response)
+      window.location.replace("/login")
     }
     try {
-      var result = await response.json();
-      handleToken(result);
+      var result = await response.json()
+      handleToken(result)
     } catch (err) {
-      return response;
+      return response
     }
-    throw new ReqError(result);
+    throw new ReqError(result)
     // console.error("Response error", result.message);
   }
-  return response;
+  return response
 }
 
 function handleToken(result) {
   if (result.token) {
-    localStorage.setItem("accessToken", result.token);
-    console.log("Set new token", result.token);
+    localStorage.setItem("accessToken", result.token)
+    console.log("Set new token", result.token)
   }
 }
 
 async function handleResponse(response) {
-  console.log("response", response);
-  const result = await response.json();
-  console.log("json response", result);
-  handleToken(result);
-  return result;
+  console.log("response", response)
+  const result = await response.json()
+  console.log("json response", result)
+  handleToken(result)
+  return result
 }
 
 export const imageRequest = async (path = "") => {
   // const token = localStorage.getItem("accessToken");
-  if (path.trim() === "") return null;
+  if (path.trim() === "") return null
   let config = {
     method: "GET"
     // headers: {
     //   Authorization: `Bearer ${token}`,
     //   mode: "no-cors"
     // }
-  };
+  }
   return new Promise((resolve, reject) => {
     fetch(api.baseUrl + path, config)
       // .then(function(res) {
@@ -64,16 +64,16 @@ export const imageRequest = async (path = "") => {
       .then(response => response.blob())
       .then(images => {
         // Then create a local URL for that image and print it
-        let outside = URL.createObjectURL(images);
-        console.log("Image", outside);
-        return outside;
+        let outside = URL.createObjectURL(images)
+        console.log("Image", outside)
+        return outside
       })
       .then(result => {
-        resolve(result);
+        resolve(result)
       })
-      .catch(err => reject(err));
-  });
-};
+      .catch(err => reject(err))
+  })
+}
 
 export const apiRequest = async (
   path = "/",
@@ -81,8 +81,8 @@ export const apiRequest = async (
   body = null,
   headers = {}
 ) => {
-  method = method.toUpperCase();
-  const token = localStorage.getItem("accessToken");
+  method = method.toUpperCase()
+  const token = localStorage.getItem("accessToken")
   let config = {
     method: method,
     headers: {
@@ -91,14 +91,14 @@ export const apiRequest = async (
       mode: "no-cors",
       ...headers
     }
-  };
+  }
 
   if (body) {
     if (body instanceof FormData) {
-      config.body = body;
-      delete config.headers["Content-Type"];
+      config.body = body
+      delete config.headers["Content-Type"]
     } else {
-      config.body = JSON.stringify(body);
+      config.body = JSON.stringify(body)
     }
   }
   return new Promise((resolve, reject) => {
@@ -106,8 +106,8 @@ export const apiRequest = async (
       .then(handleError)
       .then(handleResponse)
       .then(result => {
-        resolve(result);
+        resolve(result)
       })
-      .catch(err => reject(err));
-  });
-};
+      .catch(err => reject(err))
+  })
+}

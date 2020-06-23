@@ -1,23 +1,23 @@
-import React, { Component } from "react";
+import React, { Component } from "react"
 import {
   Button,
   Col,
   Row,
   Container
-} from "reactstrap";
+} from "reactstrap"
 
-import { bindActionCreators } from "redux";
-import { connect } from "react-redux";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { user } from "../stores/actions";
-import { apiRequest } from "../Configs";
-import Modal from "react-responsive-modal";
-import "../scss/operator.scss";
-import _ from "lodash";
-import Register from "./Register.js";
-import ReactTooltip from "react-tooltip";
-import OperatorCard from "../Components/OperatorCard";
-import FormData from "form-data";
+import { bindActionCreators } from "redux"
+import { connect } from "react-redux"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { user } from "../stores/actions"
+import { apiRequest } from "../Configs"
+import Modal from "react-responsive-modal"
+import "../scss/operator.scss"
+import _ from "lodash"
+import Register from "./Register.js"
+import ReactTooltip from "react-tooltip"
+import OperatorCard from "../Components/OperatorCard"
+import FormData from "form-data"
 class Tabs extends Component {
   state = {
     activeTab: "1",
@@ -37,69 +37,69 @@ class Tabs extends Component {
   };
 
   openModal = () => {
-    this.setState({ modalSignupOpen: true });
+    this.setState({ modalSignupOpen: true })
   };
   closeModal = () => {
-    this.setState({ modalSignupOpen: false });
+    this.setState({ modalSignupOpen: false })
   };
   openOperatorDetail = () => {
-    this.setState({ modalOperatorDetailShow: true });
+    this.setState({ modalOperatorDetailShow: true })
   };
   closeOperatorDetail = () => {
-    this.setState({ modalOperatorDetailShow: false });
+    this.setState({ modalOperatorDetailShow: false })
   };
   handleName = e => {
     this.setState({
       name: e.target.value
-    });
+    })
   };
 
   handleEmail = e => {
     this.setState({
       email: e.target.value
-    });
+    })
   };
 
   handlePassword = e => {
     this.setState({
       password: e.target.value
-    });
+    })
   };
   phoneNumberHandleChange = e => {
     this.setState({
       phoneNumber: e.target.value
-    });
+    })
   };
   fileChangedHandler = event => {
     this.setState({
       selectedFile: event.target.files[0]
-    });
-    let lengthImgName = event.target.files[0].name.length;
-    let imageName = event.target.files[0].name;
+    })
+    let lengthImgName = event.target.files[0].name.length
+    let imageName = event.target.files[0].name
     if (lengthImgName > 31) {
-      imageName = imageName.substring(0, 32);
-      imageName = imageName + "...";
+      imageName = imageName.substring(0, 32)
+      imageName = imageName + "..."
       this.setState({
         imageName: imageName
-      });
+      })
       // this.selectedFile.name = imageName;
     } else if (lengthImgName <= 32) {
       this.setState({
         imageName: imageName
-      });
+      })
     }
   };
 
   toggle = () => {
     this.setState({
       dropdownOpen: !this.state.dropdownOpen
-    });
+    })
   };
   nameChangeRoleId = event => {
     this.setState({
       dropdownOpen: !this.state.dropdownOpen,
       value: event.target.innerText
-    });
+    })
   };
   // signup = async () => {
   //       let roleId = this.state.value == 'ADMINISTRATOR' ? 1:2;
@@ -149,16 +149,16 @@ class Tabs extends Component {
   //   }
   getOperators = async () => {
     try {
-      var result = await apiRequest("/operators");
+      var result = await apiRequest("/operators")
     } catch (err) {
-      return alert(err.response.data.message);
+      return alert(err.response.data.message)
     }
-    console.log("Operators", result);
+    console.log("Operators", result)
     this.setState({
       operators: result.operators
-    });
+    })
     // Where we're fetching data from
-    // fetch('http://mobacon-api.pieros.site/mobacon/api/web/operator')
+    // fetch('http://mobacon-api.topwork.asia/mobacon/api/web/operator')
     //   // We get the API response and receive data in JSON format...
     //   .then(response => response.json())
     //   // ...then we update the users state
@@ -174,13 +174,13 @@ class Tabs extends Component {
 
   setActivate = async (id = null) => {
     if (!window.confirm("Are you sure to activate or deactivate this operator"))
-      return;
+      return
     try {
-      const result = await apiRequest(`/operator/activation/${id}`, "PATCH");
-      alert(result.message);
-      this.getOperators();
+      const result = await apiRequest(`/operator/activation/${id}`, "PATCH")
+      alert(result.message)
+      this.getOperators()
     } catch (err) {
-      alert(err.response.data.message);
+      alert(err.response.data.message)
     }
   };
 
@@ -188,42 +188,42 @@ class Tabs extends Component {
     try {
       const result = await apiRequest("/verification", "POST", {
         userId: id
-      });
+      })
       if (result) {
-        alert(result.message);
+        alert(result.message)
       }
     } catch (err) {
       if (err.response) {
-        alert(err.response.data.message);
+        alert(err.response.data.message)
       }
-      console.log(err);
+      console.log(err)
     }
   };
 
   componentDidMount() {
-    this.getOperators();
+    this.getOperators()
   }
 
   deleteOperator = async (id = null) => {
     if (!window.confirm("Are you sure to delete this operator"))
-    return;
+      return
 
     let newOperators = this.state.operators.filter(item => item.id !== id)
-    this.setState({operators: newOperators})
+    this.setState({ operators: newOperators })
 
   }
   render() {
-    const { isLoading, users, error, operators } = this.state;
-    const { modalSignupOpen } = this.state;
-    const { modalOperatorDetailShow } = this.state;
+    const { isLoading, users, error, operators } = this.state
+    const { modalSignupOpen } = this.state
+    const { modalOperatorDetailShow } = this.state
     const divStyle = {
       display: "none"
-    };
+    }
     const cursor = {
       cursor: "pointer",
       position: "relative",
       top: "2px"
-    };
+    }
 
     return (
       <React.Fragment>
@@ -308,76 +308,76 @@ class Tabs extends Component {
           </div>
         </div>
       </React.Fragment>
-    );
+    )
   }
 
   signup = async () => {
-    let roleId = this.state.value == "ADMINISTRATOR" ? 1 : 2;
-    const formData = new FormData();
-    formData.append("roleId", `${roleId}`);
-    formData.append("fullName", this.state.name);
-    formData.append("email", this.state.email);
+    let roleId = this.state.value == "ADMINISTRATOR" ? 1 : 2
+    const formData = new FormData()
+    formData.append("roleId", `${roleId}`)
+    formData.append("fullName", this.state.name)
+    formData.append("email", this.state.email)
     // if(this.)
-    formData.append("phoneNumber", this.state.phoneNumber);
-    console.log(typeof this.state.selectedFile);
+    formData.append("phoneNumber", this.state.phoneNumber)
+    console.log(typeof this.state.selectedFile)
     if (this.state.selectedFile !== "") {
-      console.log("x");
+      console.log("x")
       formData.append(
         "image",
         this.state.selectedFile,
         this.state.selectedFile.name
-      );
+      )
     }
-    console.log(formData);
+    console.log(formData)
     for (let key of formData.values()) {
-      console.log(key);
+      console.log(key)
     }
-    let result = await this.props.signUp(formData);
+    let result = await this.props.signUp(formData)
     if (result.message === "created") {
-      this.props.history.push("/");
+      this.props.history.push("/")
     } else {
-      console.log(result);
+      console.log(result)
     }
   };
   clickValidate = () => {
-    let isError = false;
+    let isError = false
     const errors = {
       fulNameError: "",
       emailError: "",
       passwordError: "",
       valueError: ""
-    };
-    var emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+    }
+    var emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
     if (
       this.state.value !== "Please Select" &&
       emailRegex.test(this.state.email) &&
       this.state.fullName !== ""
     ) {
-      isError = true;
-      this.signup();
+      isError = true
+      this.signup()
     } else {
-      isError = false;
+      isError = false
     }
     this.setState({
       ...this.state,
       ...errors
-    });
-    return isError;
+    })
+    return isError
   };
 }
 
 const mapStateToProps = ({ user_detail }) => ({
   user_detail
-});
+})
 
-console.log(mapStateToProps);
+console.log(mapStateToProps)
 const mapDispatchToProps = dispatch => {
   return {
     signUp: data => bindActionCreators(user.signUp)
-  };
-};
+  }
+}
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(Tabs);
+)(Tabs)

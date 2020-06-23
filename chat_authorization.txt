@@ -1,7 +1,7 @@
 // socket authorization
 
 // example
-const socket = io.connect(host, { // host = 'http://mobacon-api.pieros.site/
+const socket = io.connect(host, { // host = 'http://mobacon-api.topwork.asia/
     query: {
         token, // use token from storage
     },
