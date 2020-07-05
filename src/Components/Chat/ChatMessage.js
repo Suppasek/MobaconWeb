@@ -1,7 +1,7 @@
-import React, { Component } from "react";
-import styled, { keyframes } from "styled-components";
-import { imageRequest } from "../../Configs";
-import _ from "lodash";
+import React, { Component } from "react"
+import styled, { keyframes } from "styled-components"
+import { imageRequest } from "../../Configs"
+import _ from "lodash"
 import moment from 'moment'
 const messageSpawn = keyframes`
   from {
@@ -14,7 +14,7 @@ const messageSpawn = keyframes`
     filter: blur(0px);
     transform: scale(1);
   }
-`;
+`
 
 const Message = styled.div`
   padding: 8px 12px;
@@ -29,7 +29,7 @@ const Message = styled.div`
       ? `0 5px 10px 2px rgba(150, 150, 150, 0.2),
     0 3px 10px 1px rgba(150, 150, 150, 0.4)`
       : `0 5px 10px 2px #da506644, 0 3px 10px 1px #da506655`};
-`;
+`
 
 const MessageWrapper = styled.div`
   align-self: ${props => (props.isMyMessage ? "flex-end" : "flex-start")};
@@ -40,8 +40,8 @@ const MessageWrapper = styled.div`
   justify-content: ${props => (props.isMyMessage ? "flex-end" : "flex-start")};
   transform: scale(2);
   animation: ${messageSpawn} 0.5s cubic-bezier(0.05, 0.77, 0, 1) forwards;
-  flex-direction: ${props => (props.isMyMessage ? "row" : "row-reverse")};
-`;
+  /* flex-direction: ${props => (props.isMyMessage ? "row" : "row-reverse")}; */
+`
 
 const Sender = styled.div`
   width: 30px;
@@ -55,26 +55,26 @@ const Sender = styled.div`
     object-fit: cover;
     border-radius: 100%;
   }
-`;
+`
 
 const SendTime = styled.span`
   margin: 0 10px;
   opacity: .5;
-`;
+`
 const FailedMessage = styled.span`
   margin-right: 10px;
   color: #da5066 !important;
-`;
+`
 
 class ChatMessage extends Component {
   static defaultProps = { timeout: 10000 };
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
       imagePath: null,
       failed: props.failed || false
       /*read: false*/
-    };
+    }
   }
 
   componentDidMount = async () => {
@@ -82,30 +82,30 @@ class ChatMessage extends Component {
       sender: {
         info: { imagePath = "" }
       }
-    } = this.props;
-    this.setState({ imagePath });
-    this.messageTimeout();
+    } = this.props
+    this.setState({ imagePath })
+    this.messageTimeout()
   };
 
   messageTimeout = () => {
     setTimeout(() => {
       if (this.state.failed === null) {
-        this.setState({ failed: true });
+        this.setState({ failed: true })
       }
-    }, this.props.timeout);
+    }, this.props.timeout)
   };
 
   componentDidUpdate(prevProps) {
     if (prevProps !== this.props) {
-      this.setState({ failed: this.props.failed });
+      this.setState({ failed: this.props.failed })
     }
   }
 
   render() {
-    const { message, sender = null, createdAt } = this.props;
+    const { message, sender = null, createdAt } = this.props
     // const name = fullName.trim().split(/\s/)[0];
-    const { imagePath=null, failed } = this.state;
-    const isMyMessage = sender ? sender.role.id !== 3 : null;
+    const { imagePath = null, failed } = this.state
+    const isMyMessage = sender ? sender.role.id !== 3 : null
     return isMyMessage !== null ? (
       imagePath && (
         <MessageWrapper isMyMessage={isMyMessage}>
@@ -118,25 +118,25 @@ class ChatMessage extends Component {
         </MessageWrapper>
       )
     ) : (
-      // ) : (
-      //   <MessageWrapper isMyMessage={isMyMessage}>
-      //     <Message>
-      //       <Loading />
-      //     </Message>
-      //     <Sender>
-      //       <div style={{ width: 30, height: 30 }} />
-      //     </Sender>
-      //   </MessageWrapper>
-      // )
-      <div>
-        <hr />
+        // ) : (
+        //   <MessageWrapper isMyMessage={isMyMessage}>
+        //     <Message>
+        //       <Loading />
+        //     </Message>
+        //     <Sender>
+        //       <div style={{ width: 30, height: 30 }} />
+        //     </Sender>
+        //   </MessageWrapper>
+        // )
         <div>
-          <center>Error message </center>
+          <hr />
+          <div>
+            <center>Error message </center>
+          </div>
+          <hr />
         </div>
-        <hr />
-      </div>
-    );
+      )
   }
 }
 
-export default ChatMessage;
+export default ChatMessage
