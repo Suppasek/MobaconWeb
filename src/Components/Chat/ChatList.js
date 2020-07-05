@@ -1,8 +1,8 @@
-import React, { Component } from "react";
-import styled, { keyframes } from "styled-components";
-import PropTypes from "prop-types";
-import posed from "react-pose";
-import moment from 'moment';
+import React, { Component } from "react"
+import styled, { keyframes } from "styled-components"
+import PropTypes from "prop-types"
+import posed from "react-pose"
+import moment from 'moment'
 
 const ChatListWrapper = styled.div`
   display: flex;
@@ -14,7 +14,7 @@ const ChatListWrapper = styled.div`
   overflow-y: scroll;
   overflow-x: hidden;
   justify-content: flex-start;
-`;
+`
 
 // const LoadMoreAnimate = posed.div({
 //   closed: {
@@ -46,13 +46,13 @@ const LoadMore = styled.div`
       rgba(239, 239, 239, 0) 100%
     );
   }
-`;
+`
 
 const DateText = styled.h4`
   text-align: center;
   width: 100%;
   margin: 10px;
-`;
+`
 
 const Status = styled.div`
   align-self:  "flex-end";
@@ -63,43 +63,43 @@ const Status = styled.div`
   justify-content: flex-end;
   flex-direction:  "row";
   opacity: 0.5;
-`;
+`
 
 class ChatList extends Component {
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
       ...props
-    };
+    }
   }
 
   componentDidUpdate(prevProps, prevState) {
     if (prevProps !== this.props) {
-      this.setState({ ...this.props });
+      this.setState({ ...this.props })
     }
     if (prevState !== this.state) {
       this.chatList.scrollTop =
-        this.chatList.scrollHeight - this.chatList.clientHeight;
+        this.chatList.scrollHeight - this.chatList.clientHeight
     }
   }
 
   componentDidMount() {
-    this.slowCreateChat();
+    this.slowCreateChat()
   }
 
   formatDate = (date) => {
-    var check = moment(date, 'YYYY/MMMM/DD');
-    
-    var month = check.format('MMMM');
-    var day   = check.format('D');
-    var year  = check.format('YYYY');
+    var check = moment(date)
 
-    return `${day} ${month} ${year}`;
+    var month = check.format('MMMM')
+    var day = check.format('D')
+    var year = check.format('YYYY')
+
+    return `${day} ${month} ${year}`
 
   }
 
   slowCreateChat = () => {
-    setTimeout;
+    setTimeout
   };
 
   static propTypes = {
@@ -107,9 +107,9 @@ class ChatList extends Component {
     data: PropTypes.array.isRequired
   };
   render() {
-    const { onSeeMore, nothingMore, read } = this.props;
-    const { user = false, operator = false } = read;
-    const { render: RenderComponent, data } = this.state;
+    const { onSeeMore, nothingMore, read } = this.props
+    const { user = false, operator = false } = read
+    const { render: RenderComponent, data } = this.state
     // console.log("nothing more", nothingMore);
     return (
       <React.Fragment>
@@ -125,24 +125,24 @@ class ChatList extends Component {
                     return RenderComponent({
                       ...chat,
                       key: chat._id
-                    });
+                    })
                   })}
                 </div>
 
               )
             })
           }
-          {(user === true && operator === true) ? 
+          {(user === true && operator === true) ?
             <Status>Read</Status>
             :
             <Status>UnRead</Status>
           }
-  
+
         </ChatListWrapper>
-      
+
       </React.Fragment>
-    );
+    )
   }
 }
 
-export default ChatList;
+export default ChatList
